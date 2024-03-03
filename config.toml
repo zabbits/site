@@ -9,11 +9,30 @@ build_search_index = false
 
 # The site theme to use.
 theme = "anemone"
+taxonomies = [
+    {name = "tags", feed = true},
+]
+generate_feed = true
 
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = false
+highlight_code = true
 
 [extra]
-# Put all your custom variables here
+# config for anemone
+author = "zabbits"
+display_author = true
+
+default_theme = "light"
+list_pages = false
+twitter_card = false
+
+header_nav = [
+  { url = "/", name_en = "/home/" },
+  { url = "/blog", name_en = "/blog/" },
+  { url = "/journal", name_en = "/journal/" },
+  { url = "/about", name_en = "/about/" },
+]
+
+footer_content_license = "Copyright © 2024-2024 zabbits"
