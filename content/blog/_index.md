@@ -1,9 +1,12 @@
 +++
-paginate_by = 8
-path = "blog"
-title = "All blog posts"
+title = "Blog"
+description = "My blog site."
 sort_by = "date"
-page_template = "blog-page.html"
-+++
+template = "blog.html"
+page_template = "post.html"
+insert_anchor_links = "right"
+generate_feed = true
 
-> List of all *[tags](/tags)*
+[extra]
+lang = 'en'
++++
