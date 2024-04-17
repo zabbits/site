@@ -26,10 +26,56 @@ Intent有两种类型:
 {% end %}
 
 ## Intent属性
-TODO
+Intent有几个比较重要的属性，通过这些属性构造不同的Indent
+### Component name
+指定组件名称是唯一的构建显示Intent的方式.
+### Action
+一个字符串，代表需要执行的操作.
+在broadcast intent中，通常是表示一个操作已经发生了（例如广播蓝牙连接状态发生变化).
+{% tip(header="Tip") %}
+AOSP中蓝牙状态机的实现大量使用了Broadcast intent
+{% end %}
+通常一个Action也就决定了这个Intent的结构（包含哪些其他的Data，Extra等)
+### Data
+Data是操作数据的URI。指定Data的同时可以设置Type, Type可以标识数据的MIME类型。例如通过Intent查看图片：
+```java
+// 设定一个查看图片的Action
+Intent intent = new Intent(Intent.ACTION_VIEW);
+Uri data = Uri.parse("content://com.example.app/images/1");
+String type = "image/jpg";
+intent.setDataAndType(data, type);
+```
+### Category
+表示Intent的类型。
+### Extra
+Intent附加的数据信息。
+### Flags
+控制Android如何启动Activity以及在启动和如何处理Activity. 这些Flags定义在`Intent`类中, 开发者不能自定义Flags。
+
+
+接下来通过AOSP蓝牙的`A2dpStateMachine`具体看一下Intent的使用： 
+{% codeblock(name="com.android.bluetooth.a2dp.A2dpStateMachine")%}
+```java
+private void broadcastConnectionState(int newState, int prevState) {
+    log("Connection state " + mDevice + ": " + profileStateToString(prevState)
+                + "->" + profileStateToString(newState));
+
+    // 指定一个Action
+    Intent intent = new Intent(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED);
+    // 写入Extras数据
+    intent.putExtra(BluetoothProfile.EXTRA_PREVIOUS_STATE, prevState);
+    intent.putExtra(BluetoothProfile.EXTRA_STATE, newState);
+    intent.putExtra(BluetoothDevice.EXTRA_DEVICE, mDevice);
+    // 指定Flags
+    intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT
+                    | Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+    // 通过Intent发起broadcast
+    mA2dpService.sendBroadcast(intent, BLUETOOTH_CONNECT,
+            Utils.getTempAllowlistBroadcastOptions());
+}
+```
+{% end %}
+
 
 ## Intent filter
-TODO
-
-## Intent在蓝牙中的应用
 TODO
