@@ -78,4 +78,19 @@ private void broadcastConnectionState(int newState, int prevState) {
 
 
 ## Intent filter
-TODO
+Intent filter用于组件过滤接收哪些隐式的Intent.
+通过action, category, data来指定filter属性去匹配对应的Intent.
+有两种方式定义Intent filter:
+- 在APP的manifest文件中定义
+{% codeblock(name="AndroidManifest.xml")%}
+```xml
+<activity android:name="ShareActivity" android:exported="false">
+    <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+    </intent-filter>
+</activity>
+```
+{% end %}
+- 通过broadcast receiver的方法registerReceiver()动态注册
